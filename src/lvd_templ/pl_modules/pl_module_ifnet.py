@@ -381,13 +381,13 @@ class LightUniversal(pl.LightningModule):
         self.fetch_kwargs(kwargs)
 
         # LVD: A model, with a learnable context, and a query method for novel PCs
-        if self.paradigm == "LVD":  # LVD: A model, with a learnable context, and a query method for novel PCs
+        if self.paradigm in ["LVD","LoVD"]:  # LVD: A model, with a learnable context, and a query method for novel PCs
             if self.powerup==1:
                 self.model = Network_LVD_PowerUP(self.size_layers, self.gt_points*3, res=self.occ_res, input_dim=self.input_dim , b_min = np.array([-0.8, -0.8, -0.8]), b_max = np.array([0.8, 0.8, 0.8]), selfsup=self.selfsup, segm=self.segm, labels=self.labels, unsup=self.unsup)            
             elif self.powerup==2:
-                self.model = Network_LVD_PowerUP2(self.size_layers, self.gt_points*3, res=self.occ_res, input_dim=self.input_dim , b_min = np.array([-0.8, -0.8, -0.8]), b_max = np.array([0.8, 0.8, 0.8]), selfsup=self.selfsup, power_factor = self.power_factor, segm=self.segm)   
+                self.model = Network_LVD_PowerUP2(self.size_layers, self.gt_points*3, res=self.occ_res, input_dim=self.input_dim , b_min = np.array([-0.8, -0.8, -0.8]), b_max = np.array([0.8, 0.8, 0.8]), selfsup=self.selfsup, power_factor = self.power_factor) #, segm=self.segm)   # FIX andrea
             else:
-                self.model = Network_LVD(self.size_layers, self.gt_points*3, res=self.occ_res, input_dim=self.input_dim , b_min = np.array([-0.8, -0.8, -0.8]), b_max = np.array([0.8, 0.8, 0.8]), selfsup=self.selfsup, segm=self.segm)
+                self.model = Network_LVD(self.size_layers, self.gt_points*3, res=self.occ_res, input_dim=self.input_dim , b_min = np.array([-0.8, -0.8, -0.8]), b_max = np.array([0.8, 0.8, 0.8]), selfsup=self.selfsup) # , segm=self.segm)    # FIX andrea
                 
         # Universal embedding Baseline
         if self.paradigm == "Uni":  # Universal embedding: A network for incoming PC and one network for the Template
@@ -401,6 +401,7 @@ class LightUniversal(pl.LightningModule):
 
             self.model = self.models['basis'] 
             self.flag_mode = 'basis'
+
         
         # Preliminary things for behave -> does not work
         if self.behave:
@@ -408,6 +409,7 @@ class LightUniversal(pl.LightningModule):
             file = open("/mnt/sda/dummy.pkl",'rb')
             object_file = pickle.load(file)
             self.laplacian = torch.tensor(object_file['evecs'][:,0:4000],dtype=torch.float32).to(self.dev)
+
    
    # USEFUL FUNCTION FOR LIE BASELINE
     def change_mode(self,mode):

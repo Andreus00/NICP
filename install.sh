@@ -12,7 +12,8 @@ tar -xf LYSr
 rm LYSr
 
 ### Install Pytorch
-conda install -y pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia
+conda install -y pytorch torchvision torchaudio pytorch-cuda=12.1 -c pytorch -c nvidia
+# conda install -y pytorch torchvision torchaudio pytorch-cuda=12.1 -c pytorch -c nvidia
 pip install "git+https://github.com/facebookresearch/pytorch3d.git"
 
 ### External Dependency: Human Body Prior
@@ -26,11 +27,11 @@ rm -rf human_body_prior_git/
 
 ### External Dependency: IF-NET voxel preprocessings
 pip install cython
-git clone https://github.com/jchibane/if-net if-net 
-mkdir ./data/
-mkdir ./data/preprocess_voxels
-cp -r ./if-net/data_processing/* ./data/preprocess_voxels
-rm -rf if-net 
+# git clone https://github.com/jchibane/if-net if-net 
+# mkdir ./data/
+# mkdir ./data/preprocess_voxels
+# cp -r ./if-net/data_processing/* ./data/preprocess_voxels
+# rm -rf if-net 
 
 cd ./data/preprocess_voxels/libmesh
 python setup.py build_ext --inplace
@@ -49,6 +50,7 @@ sed -i -e 's/utils\/shapedirs_300.npy/utils_cop\/shapedirs_300.npy/g' ./utils_co
 
 ### Install needed libraries and current project
 pip install hydra-core==1.2.0 pytorch-lightning==1.5.10 open3d==0.15.2 trimesh==3.13.0 opencv-python==4.6.0.66 scikit-image==0.19.3 robust-laplacian==0.2.4 plotly==5.10.0
+# pip install hydra-core pytorch-lightning open3d trimesh opencv-python scikit-image robust-laplacian plotly
 
 
 pip install -e .
